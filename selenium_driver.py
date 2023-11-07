@@ -14,7 +14,6 @@ from selenium.webdriver.support import expected_conditions as EC
 
 
 class SeleniumDriver:
-    bundle: SeleniumBundle = SeleniumBundle()
 
     def __init__(self, bundle: SeleniumBundle, browser: WebDriver):
         self.bundle = bundle
@@ -22,17 +21,16 @@ class SeleniumDriver:
         self.wait = WebDriverWait(browser, timeout=10, poll_frequency=0.5,
                                   ignored_exceptions=[NoSuchElementException, StaleElementReferenceException])
 
-    def get_all_reviews(self):
+    def get_all_reviews(self) -> []:
         return self._get_review_list()
 
-    def _get_review_list(self):
-
+    def _get_review_list(self) -> []:
         review_scroll_list_element = WebDriverWait(self.browser, timeout=10).until(
             EC.presence_of_element_located((By.CLASS_NAME, self.bundle.review_scroll_list_class)))
-
+        max_review_limit = self.bundle.max_review_limit
         review_index_counter = 1
         review_list = []
-        while True:
+        while True and review_index_counter <= max_review_limit:
             try:  # Load review block
                 current_review = self.wait.until(
                     lambda d: review_scroll_list_element.
