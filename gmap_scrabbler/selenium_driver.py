@@ -12,7 +12,10 @@ from selenium_bundle import SeleniumBundle
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
-
+"""
+This class could look like dark magic, 
+this is because logic is tightly coupled with current gMap DOM structure.
+"""
 class SeleniumDriver:
 
     def __init__(self, bundle: SeleniumBundle, browser: WebDriver):
