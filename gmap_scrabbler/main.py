@@ -1,3 +1,5 @@
+import os
+from pathlib import Path, PurePath
 from typing import Optional
 
 import pandas as pd
@@ -14,28 +16,34 @@ app = Typer(no_args_is_help=True)
 
 @app.command()
 def get_reviews(
-        url: Annotated[str, typer.Argument()],
-        lang: Annotated[Optional[str], typer.Option()] = None
+        url: Annotated[str, typer.Option(prompt=True)],
+        export_path: Annotated[str, typer.Option(prompt=True)] = "d:/",
+        lang: Annotated[Optional[str], typer.Option()] = 'en'
 ) -> None:
     """
-    provide URL of place on google map.
-    the language is important, English by default
-    :param url: URL of place
-    :param lang: language
+    Open browser and scroll through reviews saving them to review.csv
+    :param url: URL to reviews on google map
+    :param export_path: where to save reviews.csv. The folder should be already exist
+    :param lang: browser locale. By default: en, also supported es
     :return:
     """
     bundle = SeleniumBundle()
     bundle.url = url
-    if lang is None or 'es':
+    if lang == 'es':
         bundle.driver_args = ['--lang=es', '--accept-lang=es']
         bundle.experimental_args = {'prefs': {'intl.accept_languages': 'es,es_ES'}}
+    elif lang is None or 'en':
+        bundle.driver_args = ['--lang=en', '--accept-lang=en']
+        bundle.experimental_args = {'prefs': {'intl.accept_languages': 'en,en_US'}}
 
     sc = SeleniumController(bundle=bundle)
     reviews = sc.start_scrapping()
     df = pd.DataFrame(reviews)
-    df.to_csv("reviews.csv")
+    Path(export_path).mkdir(parents=True, exist_ok=True)
+    path = Path(export_path).joinpath("reviews.csv")
+    df.to_csv(path)
     print("Finished")
 
 
 if __name__ == "__main__":
-    typer.run(get_reviews(test_url))
+    app()
