@@ -21,12 +21,12 @@ To use this tool, you'll need to set up the necessary components. Here are the i
 2. **Pip installation 🐍**: Ensure you have installed the package by running the following command:
 
     ```bash
-    pip install 'name of the package'
+    python -m pip install gmap_scrabbler
     ```
 
 3. **Usage**: Run the following command in the CLI window and provide necessary arguments:
    ```
-   'name of the package'
+   python -m gmap_scrabbler
    ```
 4. **Arguments⚙️**: You will be prompted to enter the following information:
 
