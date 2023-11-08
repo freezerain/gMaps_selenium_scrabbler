@@ -18,17 +18,20 @@ app = Typer(no_args_is_help=True)
 def get_reviews(
         url: Annotated[str, typer.Option(prompt=True)],
         export_path: Annotated[str, typer.Option(prompt=True)] = "d:/",
-        lang: Annotated[Optional[str], typer.Option()] = 'en'
+        lang: Annotated[Optional[str], typer.Option(prompt=True)] = 'en',
+        review_limit: Annotated[Optional[int], typer.Option(prompt=True)] = 1000
 ) -> None:
     """
     Open browser and scroll through reviews saving them to review.csv
     :param url: URL to reviews on google map
     :param export_path: where to save reviews.csv. The folder should be already exist
     :param lang: browser locale. By default: en, also supported es
+    :param review_limit: limit of reviews to save
     :return:
     """
     bundle = SeleniumBundle()
     bundle.url = url
+    bundle.max_review_limit = review_limit
     if lang == 'es':
         bundle.driver_args = ['--lang=es', '--accept-lang=es']
         bundle.experimental_args = {'prefs': {'intl.accept_languages': 'es,es_ES'}}
