@@ -4,9 +4,17 @@ import os
 
 here = os.path.abspath(os.path.dirname(__file__))
 
-with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
+with codecs.open(os.path.join(here, "README.MD"), encoding="utf-8") as fh:
     long_description = "\\n" + fh.read()
-
+here = os.path.abspath(os.path.dirname(__file__))
+readme_path = os.path.join(here, "README.MD")
+if os.path.exists(readme_path):
+    with codecs.open(readme_path, encoding="utf-8") as fh:
+        long_description = "\\n" + fh.read()
+else:
+    print("README.MD file not found")
+    print("here path: "+here)
+    print("Readme path: " +readme_path)
 setup(
     name="gmap_scrabbler",
     version='{{VERSION_PLACEHOLDER}}',
